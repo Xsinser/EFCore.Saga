@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Saga.Db/Saga.Db.csproj" Id="e1752e93-d0b9-4f23-b8b8-0c20571d167b" />
+  <Project Path="TestSaga/TestSaga.csproj" />
+</Solution>
