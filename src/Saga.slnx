@@ -1,4 +1,6 @@
 <Solution>
-  <Project Path="Saga.Db/Saga.Db.csproj" Id="e1752e93-d0b9-4f23-b8b8-0c20571d167b" />
+  <Project Path="TestSaga.Db/TestSaga.Db.csproj" Id="e1752e93-d0b9-4f23-b8b8-0c20571d167b" />
+  <Project Path="Saga.Microsoft.EntityFrameworkCore/Saga.Microsoft.EntityFrameworkCore.csproj" Id="562e4df1-a396-4ede-90cd-abeb91841642" />
+  <Project Path="Saga/Saga.csproj" Id="73bc2f1b-175e-4178-8ccd-aa629c309076" />
   <Project Path="TestSaga/TestSaga.csproj" />
 </Solution>

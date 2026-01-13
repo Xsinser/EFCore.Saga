@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Saga.Db.Entity
+namespace TestSaga.Db.Entity
 {
-    [Table("beta")]
-    public class BetaEntity
+    [Table("alpha")]
+    public class AlphaEntity
     {
         [Key]
         [Column("id")]

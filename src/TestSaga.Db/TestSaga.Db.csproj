@@ -10,4 +10,8 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Saga.Microsoft.EntityFrameworkCore\Saga.Microsoft.EntityFrameworkCore.csproj" />
+	</ItemGroup>
 </Project>

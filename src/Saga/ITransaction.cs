@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Saga;
+
+public interface ITransaction : IDisposable, IAsyncDisposable
+{
+    void Commit();
+
+    Task CommitAsync(CancellationToken cancellationToken = default);
+
+    void Rollback();
+
+    Task RollbackAsync(CancellationToken cancellationToken = default);
+}
+
