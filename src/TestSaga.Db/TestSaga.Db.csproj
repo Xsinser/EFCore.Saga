@@ -13,5 +13,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Saga.Microsoft.EntityFrameworkCore\Saga.Microsoft.EntityFrameworkCore.csproj" />
+	  <ProjectReference Include="..\Saga\Saga.csproj" />
 	</ItemGroup>
 </Project>

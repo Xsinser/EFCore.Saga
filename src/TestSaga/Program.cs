@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Saga.Db.Context;
+using Saga;
+using TestSaga.Db.Context;
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -18,4 +19,25 @@ betaOptionsBuilder.UseNpgsql(betaConnectionString);
 var alphaContext = new AlphaContext(alphaOptionsBuilder.Options);
 var betaContext = new BetaContext(betaOptionsBuilder.Options);
 
-alphaContext.Database.BeginTransaction
+using (var context = new SagaContext())
+{
+    try
+    {
+        alphaContext.BeginSagaTransaction(context);
+        betaContext.BeginSagaTransaction(context);
+
+        alphaContext.AlphaEntities.Add(new() { Id = 2 });
+        alphaContext.SaveChanges();
+
+        betaContext.BetaEntities.Add(new() { Id = 3 });
+        betaContext.BetaEntities.Add(new() { Id = 3 });
+        betaContext.SaveChanges();
+
+        context.Commit();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.ToString());
+        context.Rollback();
+    }
+}

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Saga;
+﻿namespace Saga;
 
 public interface ITransaction : IDisposable, IAsyncDisposable
 {
@@ -14,4 +10,3 @@ public interface ITransaction : IDisposable, IAsyncDisposable
 
     Task RollbackAsync(CancellationToken cancellationToken = default);
 }
-

@@ -1,10 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
-using TestSaga.Db.Entity;
-using System.Runtime.CompilerServices;
-using System.Transactions;
 using Saga.Microsoft.EntityFrameworkCore;
+using TestSaga.Db.Entity;
 
 namespace TestSaga.Db.Context
 {
@@ -18,10 +14,4 @@ namespace TestSaga.Db.Context
             Database.EnsureCreated();
         }
     }
-
-    
-
-
-
-
 }

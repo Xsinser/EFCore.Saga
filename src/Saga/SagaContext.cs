@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Transactions;
-
-namespace Saga;
+﻿namespace Saga;
 
 public class SagaContext : IDisposable, IAsyncDisposable
 {
@@ -73,4 +68,3 @@ public class SagaContext : IDisposable, IAsyncDisposable
 
     #endregion IDisposable, IAsyncDisposable
 }
-

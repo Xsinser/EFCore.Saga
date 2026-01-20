@@ -1,7 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Saga.Microsoft.EntityFrameworkCore;
 
@@ -57,4 +54,3 @@ public class Transaction : ITransaction
 
     #endregion IDisposable, IAsyncDisposable
 }
-
