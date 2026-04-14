@@ -2,52 +2,35 @@
 
 namespace Saga.Microsoft.EntityFrameworkCore;
 
-public class Transaction : ITransaction
+public class Transaction : BaseTransaction
 {
-    private readonly CancellationTokenSource _cts = new();
-    private bool _disposed;
     private IDbContextTransaction _transaction;
 
-    public Transaction(IDbContextTransaction transaction)
+    public Transaction(SagaLayer sagaLayer, IDbContextTransaction transaction) : base(sagaLayer)
     {
         _transaction = transaction;
     }
 
-    public void Commit() => _transaction.Commit();
+    public override void Commit() => _transaction.Commit();
 
-    public async Task CommitAsync(CancellationToken cancellationToken = default) => await _transaction.CommitAsync(cancellationToken);
+    public override async Task CommitAsync(CancellationToken cancellationToken = default) => await _transaction.CommitAsync(cancellationToken);
 
-    public void Rollback() => _transaction.Rollback();
+    public override void Rollback() => _transaction.Rollback();
 
-    public async Task RollbackAsync(CancellationToken cancellationToken = default) => await _transaction.RollbackAsync(cancellationToken);
+    public override async Task RollbackAsync(CancellationToken cancellationToken = default) => await _transaction.RollbackAsync(cancellationToken);
 
     #region IDisposable, IAsyncDisposable
 
-    public void Dispose()
+    public override void Dispose()
     {
-        if (_disposed) return;
-
-        _cts.Cancel();
-        _cts.Dispose();
-
         _transaction.Dispose();
-
-        GC.SuppressFinalize(this);
-        _disposed = true;
+        base.Dispose();
     }
 
-    public async ValueTask DisposeAsync()
+    public override async ValueTask DisposeAsync()
     {
-        if (_disposed) return;
-
-        _cts.Cancel();
-
         await _transaction.DisposeAsync();
-
-        _cts.Dispose();
-
-        GC.SuppressFinalize(this);
-        _disposed = true;
+        await base.DisposeAsync();
     }
 
     ~Transaction() => Dispose();

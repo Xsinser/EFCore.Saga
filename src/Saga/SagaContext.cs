@@ -4,9 +4,9 @@ public class SagaContext : IDisposable, IAsyncDisposable
 {
     private readonly CancellationTokenSource _cts = new();
     private bool _disposed;
-    private Stack<ITransaction> _transactions = [];
+    private Stack<BaseTransaction> _transactions = [];
 
-    public void WriteSaga(ITransaction transaction) => _transactions.Push(transaction);
+    public void WriteSaga(BaseTransaction transaction) => _transactions.Push(transaction);
 
     public void Commit()
     {
