@@ -30,7 +30,7 @@ using (var context = new SagaContext())
         alphaContext.SaveChanges();
 
         betaContext.BetaEntities.Add(new() { Id = 3 });
-        betaContext.BetaEntities.Add(new() { Id = 3 });
+        betaContext.BetaEntities.Add(new() { Id = 4 });
         betaContext.SaveChanges();
 
         context.Commit();
