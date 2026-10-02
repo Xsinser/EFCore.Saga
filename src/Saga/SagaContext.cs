@@ -3,10 +3,29 @@
 public class SagaContext : IDisposable, IAsyncDisposable
 {
     private readonly CancellationTokenSource _cts = new();
-    private bool _disposed;
+    private bool _disposed = false;
+    private bool _cachedLayers = false;
     private Stack<BaseTransaction> _transactions = [];
 
+    public bool CachedLayers { get => _cachedLayers; }
+
+    public SagaContext()
+    { }
+
+    public SagaContext(bool cahcedLayers)
+    {
+        _cachedLayers = cahcedLayers;
+    }
+
     public void WriteSaga(BaseTransaction transaction) => _transactions.Push(transaction);
+
+    public ISagaLayer? GetCurrentSagaLayer(Type sagaLayerType)
+    {
+        if (!_cachedLayers)
+            throw new MemberAccessException("ISagaLayer is only accessible with layer caching enabled.");
+
+        return _transactions.SingleOrDefault(x => string.Equals(x.SourceTransactionType.FullName, sagaLayerType.FullName))?.SourceTransaction;
+    }
 
     public void Commit()
     {

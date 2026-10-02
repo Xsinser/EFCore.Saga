@@ -6,7 +6,7 @@ public class Transaction : BaseTransaction
 {
     private IDbContextTransaction _transaction;
 
-    public Transaction(SagaLayer sagaLayer, IDbContextTransaction transaction) : base(sagaLayer)
+    public Transaction(SagaLayer sagaLayer, IDbContextTransaction transaction) : base(sagaLayer, sagaLayer.GetType())
     {
         _transaction = transaction;
     }

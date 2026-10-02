@@ -17,9 +17,10 @@ var betaOptionsBuilder = new DbContextOptionsBuilder<BetaContext>();
 betaOptionsBuilder.UseNpgsql(betaConnectionString);
 
 var alphaContext = new AlphaContext(alphaOptionsBuilder.Options);
+var alphaContext2 = new AlphaContext(alphaOptionsBuilder.Options);
 var betaContext = new BetaContext(betaOptionsBuilder.Options);
 
-using (var context = new SagaContext())
+using (var context = new SagaContext(true))
 {
     try
     {
@@ -28,7 +29,13 @@ using (var context = new SagaContext())
 
         alphaContext.AlphaEntities.Add(new() { Id = 2 });
         alphaContext.SaveChanges();
+        var cached = context.GetCurrentSagaLayer(typeof(AlphaContext)) as AlphaContext;
 
+        cached.BeginSagaTransaction(context);
+
+        cached.AlphaEntities.Where(x => x.Id == 2).ExecuteDelete();
+
+        alphaContext.SaveChanges();
         betaContext.BetaEntities.Add(new() { Id = 3 });
         betaContext.BetaEntities.Add(new() { Id = 4 });
         betaContext.SaveChanges();

@@ -5,12 +5,14 @@ public abstract class BaseTransaction : IDisposable, IAsyncDisposable
     private readonly CancellationTokenSource _cts = new();
     private bool _disposed;
 
-    public BaseTransaction(IDisposable sourceTransaction)
+    public BaseTransaction(ISagaLayer sourceTransaction, Type sourceTransactionType)
     {
         SourceTransaction = sourceTransaction;
+        SourceTransactionType = sourceTransactionType;
     }
 
-    protected IDisposable SourceTransaction { get; private set; }
+    public ISagaLayer SourceTransaction { get; private set; }
+    public Type SourceTransactionType { get; private set; }
 
     public abstract void Commit();
 
