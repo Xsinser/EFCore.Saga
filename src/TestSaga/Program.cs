@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Saga;
+using Saga.Microsoft.EntityFrameworkCore;
 using TestSaga.Db.Context;
 
 var configuration = new ConfigurationBuilder()
@@ -29,7 +30,7 @@ using (var context = new SagaContext(true))
 
         alphaContext.AlphaEntities.Add(new() { Id = 2 });
         alphaContext.SaveChanges();
-        var cached = context.GetCurrentSagaLayer(typeof(AlphaContext)) as AlphaContext;
+        var cached = new CachedSagaContext(context).GetCurrentSagaLayer<AlphaContext>();
 
         cached.BeginSagaTransaction(context);
 

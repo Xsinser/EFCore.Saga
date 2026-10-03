@@ -1,11 +1,13 @@
-﻿namespace Saga;
+﻿using System.Collections.Concurrent;
+
+namespace Saga;
 
 public class SagaContext : IDisposable, IAsyncDisposable
 {
     private readonly CancellationTokenSource _cts = new();
     private bool _disposed = false;
     private bool _cachedLayers = false;
-    private Stack<BaseTransaction> _transactions = [];
+    protected ConcurrentStack<BaseTransaction> Transactions = [];
 
     public bool CachedLayers { get => _cachedLayers; }
 
@@ -17,38 +19,37 @@ public class SagaContext : IDisposable, IAsyncDisposable
         _cachedLayers = cahcedLayers;
     }
 
-    public void WriteSaga(BaseTransaction transaction) => _transactions.Push(transaction);
-
-    public ISagaLayer? GetCurrentSagaLayer(Type sagaLayerType)
+    public SagaContext(SagaContext context)
     {
-        if (!_cachedLayers)
-            throw new MemberAccessException("ISagaLayer is only accessible with layer caching enabled.");
-
-        return _transactions.SingleOrDefault(x => string.Equals(x.SourceTransactionType.FullName, sagaLayerType.FullName))?.SourceTransaction;
+        Transactions = context.Transactions;
+        _cachedLayers = context._cachedLayers;
+        _cts = context._cts;
     }
+
+    public void WriteSaga(BaseTransaction transaction) => Transactions.Push(transaction);
 
     public void Commit()
     {
-        foreach (var transaction in _transactions)
+        foreach (var transaction in Transactions)
             transaction.Commit();
     }
 
     public async Task CommitAsync(CancellationToken cancellationToken = default)
 
     {
-        foreach (var transaction in _transactions)
+        foreach (var transaction in Transactions)
             await transaction.CommitAsync(cancellationToken);
     }
 
     public void Rollback()
     {
-        foreach (var transaction in _transactions)
+        foreach (var transaction in Transactions)
             transaction.Rollback();
     }
 
     public async Task RollbackAsync(CancellationToken cancellationToken = default)
     {
-        foreach (var transaction in _transactions)
+        foreach (var transaction in Transactions)
             await transaction.RollbackAsync(cancellationToken);
     }
 
@@ -61,7 +62,7 @@ public class SagaContext : IDisposable, IAsyncDisposable
         _cts.Cancel();
         _cts.Dispose();
 
-        foreach (var transaction in _transactions)
+        foreach (var transaction in Transactions)
             transaction.Dispose();
 
         GC.SuppressFinalize(this);
@@ -74,7 +75,7 @@ public class SagaContext : IDisposable, IAsyncDisposable
 
         _cts.Cancel();
 
-        foreach (var transaction in _transactions)
+        foreach (var transaction in Transactions)
             await transaction.DisposeAsync();
 
         _cts.Dispose();
