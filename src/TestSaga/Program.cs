@@ -30,13 +30,10 @@ using (var context = new SagaContext(true))
 
         alphaContext.AlphaEntities.Add(new() { Id = 2 });
         alphaContext.SaveChanges();
-        var cached = new CachedSagaContext(context).GetCurrentSagaLayer<AlphaContext>();
 
-        cached.BeginSagaTransaction(context);
+        SubData(context);
 
-        cached.AlphaEntities.Where(x => x.Id == 2).ExecuteDelete();
 
-        alphaContext.SaveChanges();
         betaContext.BetaEntities.Add(new() { Id = 3 });
         betaContext.BetaEntities.Add(new() { Id = 4 });
         betaContext.SaveChanges();
@@ -48,4 +45,13 @@ using (var context = new SagaContext(true))
         Console.WriteLine(ex.ToString());
         context.Rollback();
     }
+}
+
+static void SubData(SagaContext context)
+{
+    var cached = new CachedSagaContext(context).GetCurrentSagaLayer<AlphaContext>();
+
+    cached.BeginSagaTransaction(context);
+
+    cached.AlphaEntities.Where(x => x.Id == 2).ExecuteDelete();
 }

@@ -18,5 +18,29 @@
             else
                 return null;
         }
+
+        #region IDisposable, IAsyncDisposable
+
+        public new void Dispose()
+        {
+            if (_disposed) return;
+
+            Transactions = null;
+
+            _disposed = true;
+        }
+
+        public new async ValueTask DisposeAsync()
+        {
+            if (_disposed) return;
+
+            Transactions = null;
+
+            _disposed = true;
+        }
+
+        ~CachedSagaContext() => Dispose();
+
+        #endregion IDisposable, IAsyncDisposable
     }
 }

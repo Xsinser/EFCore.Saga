@@ -4,8 +4,8 @@ namespace Saga;
 
 public class SagaContext : IDisposable, IAsyncDisposable
 {
-    private readonly CancellationTokenSource _cts = new();
-    private bool _disposed = false;
+    protected readonly CancellationTokenSource _cts = new();
+    protected bool _disposed = false;
     private bool _cachedLayers = false;
     protected ConcurrentStack<BaseTransaction> Transactions = [];
 
